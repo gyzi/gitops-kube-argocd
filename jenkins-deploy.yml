@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: jenkins
+  name: jenkins
+  namespace: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: jenkins
+    spec:
+      volumes:
+      - name: jenkins-vol
+        hostPath:
+          path: /tmp/jenkins-vol
+      containers:
+      - image: jenkins:2.60.3-alpine
+        name: jenkins
+        ports:
+        - name: http
+          containerPort: 8080
+        - name: server
+          containerPort: 5000
+        envFrom:
+        - configMapRef:
+            name: jenkins-config
+        volumeMounts:
+        - name: jenkins-vol
+          mountPath: /var/jenkins_home
+        resources:
+          requests:
+            cpu: 0.5m
+            memory: 256Mi
+
