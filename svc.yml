@@ -15,6 +15,23 @@ spec:
 status:
   loadBalancer: {}
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apache-svc
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: apache
+  type: ClusterIP
+status:
+  loadBalancer: {}
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
